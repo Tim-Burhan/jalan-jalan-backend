@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 const app = express();
 const rootRouter = require("./src/routes");
 
-const { APP_UPLOADS_ROUTE, APP_UPLOADS_PATH, APP_PORT } = process.env;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(APP_UPLOADS_ROUTE, express.static(APP_UPLOADS_PATH));

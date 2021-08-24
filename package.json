@@ -24,13 +24,9 @@
     "express-validator": "^6.12.1",
     "multer": "^1.4.3",
     "argon2": "^0.28.2",
-    "body-parser": "^1.19.0",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
     "formidable": "^1.2.2",
     "fs-extra": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
-    "multer": "^1.4.3",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5"
   },

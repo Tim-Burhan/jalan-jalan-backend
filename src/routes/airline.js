@@ -1,6 +1,6 @@
 const airline = require("express").Router();
 const airlineController = require("../controllers/airline");
-const picture = require("../middlewares/uploads").single("picture");
+const picture = require("../middleware/uploads")
 
 
 airline.post("/", picture,  airlineController.createAirline);

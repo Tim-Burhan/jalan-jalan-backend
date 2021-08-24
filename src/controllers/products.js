@@ -24,7 +24,7 @@ exports.createProducts = async (req, res) => {
 		terminal,
 		gate,
 		id_class,
-    } = req.body;
+	} = req.body;
 
 	if(price < 50000){
 		return res.json({
@@ -51,16 +51,16 @@ exports.createProducts = async (req, res) => {
 	};
 	try{
 		const result = await productModel.create(data);
-    const facility = {productId: result.id, facilityId: req.body.facility}
-    const facilitydata = await productFacilityModel.create(facility);
+		const facility = {productId: result.id, facilityId: req.body.facility};
+		const facilitydata = await productFacilityModel.create(facility);
 		return res.json({
 			success: true,
 			message : "Product Created Succesfully",
 			results: result,
-      resultsFacility: facilitydata
+			resultsFacility: facilitydata
 		});
 	}catch(err){
-    console.log(err);
+		console.log(err);
 		return res.json({
 			success: false,
 			message : "Product Created failed",
@@ -264,25 +264,26 @@ exports.SearchProducts = async (req, res) => {
 	const filterAirline = req.query.filterAirline || "";
 	const filterPrice1 = req.query.filterPrice1 || 150000;
 	const filterPrice2 = req.query.filterPrice2 || 250000;
-	const filterDeparture1 = req.query.filterDeparture1 || "07:00";
-	const filterDeparture2 = req.query.filterDeparture2 || "08:00";
-	const filterDeparture3 = req.query.filterDeparture3 || "09:00";
+	const filterDeparture1 = req.query.filterDeparture1 || "10:00";
+	const filterDeparture2 = req.query.filterDeparture2 || "";
+	const filterDeparture3 = req.query.filterDeparture3 || "";
 	const filterArrive1 = req.query.filterArrive1 || "07:00";
 	const filterArrive2 = req.query.filterArrive2 || "08:00";
 	const filterArrive3 = req.query.filterArrive3 || "09:00";
 	const filterTransit1 = req.query.filterTransit1 || "";
-	const filterFacility = req.query.filterFacility || "1";
+	const filterFacility = req.query.filterFacility || "";
 	const page = parseInt(req.query.page) || 1;
 	const limits = parseInt(req.query.limit) || 5;
 	try{
-		const data = await productModel.findAndCountAll({
+		const data = await productModel.findAll({
 			where: {
 				deletedBy: 0,
 				[Op.or]:[
 					{price: {
 						[Op.between] : [filterPrice1,filterPrice2]
 					}},
-					{transit: filterTransit1},
+					{transit:{ 
+						[Op.substring] : filterTransit1}},
 					{time_arrive: {
 						[Op.in] : [filterArrive1,filterArrive2,filterArrive3,]
 					}},
@@ -349,21 +350,77 @@ exports.SearchProducts = async (req, res) => {
 			limit: limits,
 			offset: (page - 1) * limits,
 		});
-		const totalPage = Math.ceil((data.count -1) / limits);
+		const datapage = await productModel.count({
+			where: {
+				deletedBy: 0,
+				[Op.or]:[
+					{price: {
+						[Op.between] : [filterPrice1,filterPrice2]
+					}},
+					{transit:{ 
+						[Op.substring] : filterTransit1}},
+					{time_arrive: {
+						[Op.in] : [filterArrive1,filterArrive2,filterArrive3,]
+					}},
+					{time_leave: {
+						[Op.in] : [filterDeparture1,filterDeparture2,filterDeparture3]
+					}},
+				],
+			},
+			include: [{
+				model: airlineModel,
+				as : "airline",
+				attributes: ["id","name","picture", "extra_price"],
+				where : {
+					name: {
+						[Op.substring] : filterAirline
+					}
+				},  
+			},
+			{
+				model: destinationModel,
+				as : "destination" ,
+				attributes: {
+					exclude: ["createdAt", "updatedAt"]
+				},
+				where: {
+					[Op.or]:[
+						{destination_city: {
+							[Op.substring] : cond
+						}},
+						{destination_country: {
+							[Op.substring] : cond
+						}},
+					]
+				},
+			},
+			{
+				model: classModel,
+				as : "class",  
+				attributes: {
+					exclude: ["createdAt", "updatedAt"]
+				} 
+			},
+			],
+			attributes: {
+				exclude: ["createdAt", "updatedAt"]
+			}, 
+		});
+		const totalPage = Math.ceil((datapage) / limits);
 		const pagination = {
-			totaldata: data.count,
+			totaldata: datapage,
 			currentPage: page,
 			totalPage: totalPage,
 			limitData: limits,
 			nextPage : page < totalPage ? `${API_URL}/products?search=${cond}&page=${page + 1}` : null,
 			prevPage : page > 1 ? `${API_URL}/products?search=${cond}&page=${page - 1}` : null
 		};
-		const finaldata = data.rows;
+		const finaldata = data;
 		if(finaldata.length >= 1){
 			return res.json({
 				success: true,
 				message: "List product",
-				results: data,
+				results: finaldata,
 				pageInfo: pagination
 			});
 		}else{
