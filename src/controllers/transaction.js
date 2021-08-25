@@ -92,7 +92,11 @@ exports.getDetailTransaction = async (req,res) => {
 					],
 					include: [Destination, Airline],
 				}
-			]
+			],
+      
+			attributes: {
+				exclude: ["destinationId", "airlineId" ,"createdAt", "updatedAt"]
+			}
 		});
 		if (trxDetail.id === null) {
 			return formResponse(res, 404, "Id transaction not found!");

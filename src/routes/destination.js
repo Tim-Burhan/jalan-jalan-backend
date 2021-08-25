@@ -1,6 +1,6 @@
 const destination = require("express").Router();
 const destinationController = require("../controllers/destination");
-const picture = require("../middleware/uploads");
+const picture = require("../middleware/uploads")
 
 
 destination.post("/", picture,  destinationController.createDestination);
