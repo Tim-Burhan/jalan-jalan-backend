@@ -28,6 +28,14 @@ exports.getTransaction = async (req, res) => {
 			{
 				model: productModel,
 				as: "product",
+				attributes: [
+					"day",
+					"date",
+					"month",
+					"years",
+					"time_arrive",
+					"code"
+				],
 				include: [Destination, Airline],
 			}
 		],
@@ -74,6 +82,14 @@ exports.getDetailTransaction = async (req,res) => {
 				{
 					model: productModel,
 					as: "product",
+					attributes: [
+						"day",
+						"date",
+						"month",
+						"years",
+						"time_arrive",
+						"code"
+					],
 					include: [Destination, Airline],
 				}
 			],
