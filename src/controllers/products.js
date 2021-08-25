@@ -5,7 +5,7 @@ const destinationModel = require("../models/destination");
 const classModel = require("../models/class");
 const facilityModel = require("../models/facility");
 const productFacilityModel = require("../models/productFacility");
-const destinationModels = require("../models/destination");
+// const destinationModels = require("../models/destination");
 const {API_URL} = process.env;
 
 exports.createProducts = async (req, res) => {
@@ -433,7 +433,7 @@ exports.SearchProducts = async (req, res) => {
 		console.log(err);
 		return res.json({
 			success: false,
-			message: "Product not found",
+			message: "Product not found! catch",
 			err: err,
 		});
 	}

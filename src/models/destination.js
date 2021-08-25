@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../config/sequelize");
-const productModel = require("./products");
+// const productModel = require("./products");
 
 const Destination = sequelize.define("destinations", {
 	picture: Sequelize.STRING,
