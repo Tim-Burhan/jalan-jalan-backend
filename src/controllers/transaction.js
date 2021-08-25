@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const { response: formResponse } = require("../helpers/formResponse");
 const Destination = require("../models/destination");
 const Airline = require("../models/airline");
+const Class = require("../models/class");
 
 exports.createTransaction = async (req, res) => {
 	const {id} = req.authUser;
@@ -28,14 +29,6 @@ exports.getTransaction = async (req, res) => {
 			{
 				model: productModel,
 				as: "product",
-				attributes: [
-					"day",
-					"date",
-					"month",
-					"years",
-					"time_arrive",
-					"code"
-				],
 				include: [Destination, Airline],
 			}
 		],
@@ -82,18 +75,9 @@ exports.getDetailTransaction = async (req,res) => {
 				{
 					model: productModel,
 					as: "product",
-					attributes: [
-						"day",
-						"date",
-						"month",
-						"years",
-						"time_arrive",
-						"code"
-					],
-					include: [Destination, Airline],
+					include: [Destination, Airline, Class],
 				}
 			],
-      
 			attributes: {
 				exclude: ["destinationId", "airlineId" ,"createdAt", "updatedAt"]
 			}
