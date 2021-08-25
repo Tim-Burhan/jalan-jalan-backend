@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const { response: formResponse } = require("../helpers/formResponse");
 const Destination = require("../models/destination");
 const Airline = require("../models/airline");
+const Class = require("../models/class");
 
 exports.createTransaction = async (req, res) => {
 	const {id} = req.authUser;
@@ -74,10 +75,9 @@ exports.getDetailTransaction = async (req,res) => {
 				{
 					model: productModel,
 					as: "product",
-					include: [Destination, Airline],
+					include: [Destination, Airline, Class],
 				}
 			],
-      
 			attributes: {
 				exclude: ["destinationId", "airlineId" ,"createdAt", "updatedAt"]
 			}
