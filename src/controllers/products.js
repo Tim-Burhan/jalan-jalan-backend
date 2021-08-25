@@ -5,7 +5,7 @@ const destinationModel = require("../models/destination");
 const classModel = require("../models/class");
 const facilityModel = require("../models/facility");
 const productFacilityModel = require("../models/productFacility");
-const destinationModels = require("../models/destination");
+// const destinationModels = require("../models/destination");
 const {API_URL} = process.env;
 
 exports.createProducts = async (req, res) => {
@@ -24,7 +24,7 @@ exports.createProducts = async (req, res) => {
 		terminal,
 		gate,
 		id_class,
-    } = req.body;
+	} = req.body;
 
 	if(price < 50000){
 		return res.json({
@@ -51,16 +51,16 @@ exports.createProducts = async (req, res) => {
 	};
 	try{
 		const result = await productModel.create(data);
-    const facility = {productId: result.id, facilityId: req.body.facility}
-    const facilitydata = await productFacilityModel.create(facility);
+		const facility = {productId: result.id, facilityId: req.body.facility};
+		const facilitydata = await productFacilityModel.create(facility);
 		return res.json({
 			success: true,
 			message : "Product Created Succesfully",
 			results: result,
-      resultsFacility: facilitydata
+			resultsFacility: facilitydata
 		});
 	}catch(err){
-    console.log(err);
+		console.log(err);
 		return res.json({
 			success: false,
 			message : "Product Created failed",
@@ -271,7 +271,7 @@ exports.SearchProducts = async (req, res) => {
 	const filterArrive2 = req.query.filterArrive2 || "08:00";
 	const filterArrive3 = req.query.filterArrive3 || "09:00";
 	const filterTransit1 = req.query.filterTransit1 || "";
-	const filterFacility = req.query.filterFacility || "1";
+	const filterFacility = req.query.filterFacility || "";
 	const page = parseInt(req.query.page) || 1;
 	const limits = parseInt(req.query.limit) || 5;
 	try{
@@ -376,7 +376,7 @@ exports.SearchProducts = async (req, res) => {
 		console.log(err);
 		return res.json({
 			success: false,
-			message: "Product not found",
+			message: "Product not found! catch",
 			err: err,
 		});
 	}

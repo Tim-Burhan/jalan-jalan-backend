@@ -4,13 +4,11 @@ const sequelize = require("./src/config/sequelize");
 
 const {APP_UPLOADS_ROUTE, APP_UPLOADS_PATH, APP_PORT} = process.env;
 const bodyParser = require("body-parser");
-
+const cors = require("cors");
 const app = express();
 const rootRouter = require("./src/routes");
 
-const { APP_UPLOADS_ROUTE, APP_UPLOADS_PATH, APP_PORT } = process.env;
-
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 app.use(APP_UPLOADS_ROUTE, express.static(APP_UPLOADS_PATH));
 app.use(bodyParser.urlencoded({extended: false}));
 

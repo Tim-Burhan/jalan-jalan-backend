@@ -27,7 +27,7 @@ const Products = sequelize.define("products", {
 Products.belongsTo(airlineModel, {foreignKey: "id_airline", sourceKey: "id"});
 Products.belongsTo(destinationModel, {foreignKey: "id_destination", sourceKey: "id"});
 Products.belongsTo(classModel, {foreignKey: "id_class", sourceKey: "id"});
-// Products.belongsToMany(ProductFacility, {foreignKey: "id", sourceKey: "id_product"});
-Products.hasMany(ProductFacility);
+Products.belongsTo(ProductFacility, {foreignKey: "id", sourceKey: "productId"});
+// Products.hasMany(ProductFacility);
 
 module.exports = Products;

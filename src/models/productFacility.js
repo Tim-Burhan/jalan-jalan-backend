@@ -4,7 +4,7 @@ const Facility = require("./facility");
 // const Products = require("./products");
 
 
-const ProductFacility = sequelize.define("product_facility", {
+const ProductFacility = sequelize.define("product_facilities", {
 	productId: Sequelize.INTEGER,
 	facilityId: Sequelize.INTEGER,
 });

@@ -6,7 +6,6 @@ exports.createAirline = async (req, res) => {
 	try{
 		if(req.file){
 			req.body.picture = req.file ? `${APP_UPLOADS_ROUTE}/${req.file.filename}` : null;
-			console.log(req.body.name);
 			const resultsWithReqFile = await airlineModel.create(req.body);
 			resultsWithReqFile.set({
 				deletedBy: 0
@@ -30,7 +29,7 @@ exports.createAirline = async (req, res) => {
 			resultsNoReqFile.set({
 				deletedBy: 0
 			});
-			await resultsWithReqFile.save();
+			await resultsNoReqFile.save();
 			return res.json({
 				success: true,
 				message : "Airline without req file Created Succesfully",
@@ -111,7 +110,7 @@ exports.UpdateAirline = async (req, res) => {
 			}
 		});
 		data.set(req.body);
-		  await data.save();
+		await data.save();
 		try{
 			return res.json({
 				success: true,
@@ -133,7 +132,7 @@ exports.UpdateAirline = async (req, res) => {
 			}
 		});
 		data.set(req.body);
-		  await data.save();
+		await data.save();
 		try{
 			return res.json({
 				success: true,

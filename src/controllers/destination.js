@@ -38,7 +38,7 @@ exports.createDestination = async (req, res) => {
 			});
 		}
 	}catch(err){
-    console.log(err);
+		console.log(err);
 		return res.json({
 			success: false,
 			message : "Destination Created failed",
@@ -53,10 +53,10 @@ exports.SearchDestinations = async (req, res) => {
 		const data = await destinationModel.findAll({
 			where: {
 				[Op.or]:[
-					{city: {
+					{destination_city: {
 						[Op.substring] : cond
 					}},
-					{country: {
+					{destination_country: {
 						[Op.substring] : cond
 					}},
 				]
