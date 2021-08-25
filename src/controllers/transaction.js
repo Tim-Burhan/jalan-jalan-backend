@@ -2,6 +2,8 @@ const transactionModel = require("../models/transaction");
 const productModel = require("../models/products");
 const { Op } = require("sequelize");
 const { response: formResponse } = require("../helpers/formResponse");
+const Destination = require("../models/destination");
+const Airline = require("../models/airline");
 
 exports.createTransaction = async (req, res) => {
 	const {id} = req.authUser;
@@ -24,9 +26,21 @@ exports.getTransaction = async (req, res) => {
 		},
 		include: [
 			{
-				model: productModel
+				model: productModel,
+				as: "product",
+				attributes: [
+					"day",
+					"date",
+					"month",
+					"years",
+					"time_arrive"
+				],
+				include: [Destination, Airline],
 			}
-		]
+		],
+		attributes: {
+			exclude: ["destinationId", "airlineId" ,"createdAt", "updatedAt"]
+		}
 	});
 	return formResponse(res, 200, "List user transactions!", trx);
 };
