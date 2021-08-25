@@ -53,12 +53,21 @@ exports.createProducts = async (req, res) => {
 		const result = await productModel.create(data);
 		const facility = {productId: result.id, facilityId: req.body.facility};
 		const facilitydata = await productFacilityModel.create(facility);
-		return res.json({
-			success: true,
-			message : "Product Created Succesfully",
-			results: result,
-			resultsFacility: facilitydata
-		});
+		try {
+			return res.json({
+				success: true,
+				message: "Product Created Succesfully",
+				results: result,
+				resultsFacility: facilitydata
+			});
+		} catch (error) {
+			console.log(error);
+			return res.json({
+				success: false,
+				message: "Product Created failed",
+				err: error,
+			});
+		}
 	}catch(err){
 		console.log(err);
 		return res.json({
