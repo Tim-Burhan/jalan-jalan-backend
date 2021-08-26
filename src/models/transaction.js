@@ -7,6 +7,7 @@ const Transaction = sequelize.define("transactions", {
 	productId: Sequelize.INTEGER,
 	userId: Sequelize.INTEGER,
 	status: Sequelize.TINYINT,
+	deletedBy: Sequelize.TINYINT,
 });
 
 Transaction.belongsTo(ProductModel, {sourceKey: "id"});
