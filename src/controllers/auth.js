@@ -85,6 +85,14 @@ exports.forgotPassword = async (req, res) => {
 				console.log("Sent Success!!!!");
 			}
 		});
-		return formResponse(res, 200, "Your link has been send!");
+		return formResponse(res, 200, "Your link has been send!", mailOptions);
 	}
 };
+
+// exports.getDirectLink = async (req,res) => {
+// 	const {token} = req.params;
+// 	const auth = await profileModel.findOne();
+// };
+// exports.resetPassword = async (req, res) => {
+
+// };

@@ -215,50 +215,6 @@ exports.UpdateProducts = async (req, res) => {
 };
 
 
-// exports.SearchProducts = async (req, res) => {
-// 	const cond = req.query.search || "";
-// 	try{
-// 		const data = await destinationModels.findAll({
-// 			where: {
-// 				[Op.or]:[
-// 					{city: {
-// 						[Op.substring] : cond
-// 					}},
-// 					{country: {
-// 						[Op.substring] : cond
-// 					}},
-// 				]
-// 			},
-// 			include: [{
-// 				model: productModel,
-// 				as : "products"   
-// 			},
-// 			// {
-// 			// 	model: destinationModel,
-// 			// 	as : "destination"   
-// 			// },
-// 			// {
-// 			// 	model: classModel,
-// 			// 	as : "class"   
-// 			// },
-// 			]
-// 		});
-// 		return res.json({
-// 			success: true,
-// 			message: "List product",
-// 			results: data,
-// 		});
-// 	}catch(err){
-// 		console.log(err);
-// 		return res.json({
-// 			success: false,
-// 			message: "Product not found",
-// 			err: err,
-// 		});
-// 	}
-// };
-
-
 exports.SearchProducts = async (req, res) => {
 	const cond = req.query.search || "";
 	const filterAirline = req.query.filterAirline || "";

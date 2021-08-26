@@ -9,7 +9,9 @@ const auth = require("./auth");
 const cardPay = require("./cardPayments");
 const profile = require("./profile");
 const transaction = require("./transaction");
+const chat = require("./chat");
 
+router.use("/chats", chat);
 router.use("/products", productRouter);
 router.use("/airline", airlineRouter);
 router.use("/destination", destinationRouter);

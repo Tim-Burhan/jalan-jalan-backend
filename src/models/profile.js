@@ -6,6 +6,7 @@ const Profile = sequelize.define("users", {
 	username: Sequelize.STRING,
 	password: Sequelize.STRING,
 	email: Sequelize.STRING,
+	phoneNumber: Sequelize.STRING,
 	picture: Sequelize.STRING,
 	city: Sequelize.STRING,
 	address: Sequelize.STRING,
