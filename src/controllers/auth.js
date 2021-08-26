@@ -34,7 +34,7 @@ exports.login = async(req, res) => {
 			// console.log("kondisi dua: ", checkPass);
 			if (checkPass) {
 				const token = jwt.sign({id:auth.id, email: auth.email}, APP_SECRET_KEY, {expiresIn: "2h"});
-				return formResponse(res, 200, "login success!", {token});
+				return formResponse(res, 200, "login success!", {token, id:auth.id});
 			} else {
 				return formResponse(res, 400, "password does'n match!");
 			}
