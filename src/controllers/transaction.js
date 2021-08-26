@@ -10,6 +10,7 @@ exports.createTransaction = async (req, res) => {
 	const {id} = req.authUser;
 	const setData = req.body;
 	setData.status = 0;
+	setData.deletedBy = 0;
 	setData.userId = id;
 	try {
 		const trx = await transactionModel.create(setData);
@@ -21,22 +22,28 @@ exports.createTransaction = async (req, res) => {
 
 exports.getTransaction = async (req, res) => {
 	const {id} = req.authUser;
-	const trx = await transactionModel.findAll({
-		where: {
-			userId: id
-		},
-		include: [
-			{
-				model: productModel,
-				as: "product",
-				include: [Destination, Airline],
+	try {
+		const trxAll = await transactionModel.findAll({
+			where: {
+				userId: id,
+				deletedBy: 0
+			},
+			include: [
+				{
+					model: productModel,
+					as: "product",
+					include: [Destination, Airline],
+				}
+			],
+			attributes: {
+				exclude: ["destinationId", "airlineId", "createdAt", "updatedAt"]
 			}
-		],
-		attributes: {
-			exclude: ["destinationId", "airlineId" ,"createdAt", "updatedAt"]
-		}
-	});
-	return formResponse(res, 200, "List user transactions!", trx);
+		});
+		return formResponse(res, 200, "List all user transactions!", trxAll);
+    
+	} catch (error) {
+		return formResponse(res, 500, "Something wrong an error occured!", error);
+	}
 };
 
 exports.paymentProcess = async (req, res) => {
@@ -92,3 +99,27 @@ exports.getDetailTransaction = async (req,res) => {
 	}
 };
 
+exports.deletedTransactionBy = async (req, res) => {
+	const {id} = req.params;
+	const setData = req.body;
+	setData.deletedBy = 1;
+	try {
+		const getTrxId = await transactionModel.findByPk(id);
+		if (getTrxId === null) {
+			return formResponse(res, 404, "Id transaction not found!");
+		} else {
+			const deletedTrx = await transactionModel.update(setData, {
+				where: {
+					id: id
+				}
+			});
+			if (deletedTrx.deletedBy === 1) {
+				return formResponse(res, 400, "isDeleted!");
+			} else {
+				return formResponse(res, 200, "Deleted success!", deletedTrx);
+			}
+		}
+	} catch (error) {
+		return formResponse(res, 500, "Something wrong!!");
+	}
+};
