@@ -115,7 +115,7 @@ exports.getDetailProductById = async (req,res) => {
 		return res.json({
 			success: true,
 			message: `Detail Product of id: ${id} `,
-			results: data
+			results: data[0]
 		});
 	}catch(err){
 		console.log(err);
@@ -186,8 +186,8 @@ exports.SearchProducts = async (req, res) => {
 	const filterAirline = req.query.filterAirline || "";
 	const filterPrice1 = req.query.filterPrice1 || 150000;
 	const filterPrice2 = req.query.filterPrice2 || 250000;
-	const filterDeparture1 = req.query.filterDeparture1 || "10:00";
-	const filterArrive1 = req.query.filterArrive1 || "07:00";
+	const filterDeparture1 = req.query.filterDeparture1 || "";
+	const filterArrive1 = req.query.filterArrive1 || "";
 	const filterTransit1 = req.query.filterTransit1 || "";
 	const page = parseInt(req.query.page) || 1;
 	const limits = parseInt(req.query.limit) || 5;
@@ -200,10 +200,10 @@ exports.SearchProducts = async (req, res) => {
 						[Op.between] : [filterPrice1,filterPrice2]
 					}},
 					{time_leave: {
-						[Op.in] : [filterDeparture1]
+						[Op.substring] : [filterDeparture1]
 					}},
 					{time_arrive: {
-						[Op.in] : [filterArrive1]
+						[Op.substring] : [filterArrive1]
 					}},
 					{transit:{ 
 						[Op.substring] : filterTransit1}},
@@ -269,14 +269,14 @@ exports.SearchProducts = async (req, res) => {
 					{price: {
 						[Op.between] : [filterPrice1,filterPrice2]
 					}},
+					{time_leave: {
+						[Op.substring] : [filterDeparture1]
+					}},
+					{time_arrive: {
+						[Op.substring] : [filterArrive1]
+					}},
 					{transit:{ 
 						[Op.substring] : filterTransit1}},
-					{time_arrive: {
-						[Op.in] : [filterArrive1]
-					}},
-					{time_leave: {
-						[Op.in] : [filterDeparture1]
-					}},
 				],
 			},
 			include: [{
@@ -318,7 +318,7 @@ exports.SearchProducts = async (req, res) => {
 				exclude: ["createdAt", "updatedAt"]
 			}, 
 		});
-		const totalPage = Math.ceil((datapage) / limits);
+		const totalPage = Math.ceil(datapage / limits);
 		const pagination = {
 			totaldata: datapage,
 			currentPage: page,
