@@ -19,8 +19,9 @@ const Auth = sequelize.define("users", {
 	},
 	password: {
 		type: Sequelize.STRING,
+		allowNull: true,
 		validate: {
-			len: [5, 10]
+			len: [5, 255]
 		}
 	},
 	email: {
