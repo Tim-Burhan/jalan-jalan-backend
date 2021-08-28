@@ -18,7 +18,8 @@ exports.register = async(req, res) => {
 			return formResponse(res, 200, "register success!", auth);
 		}
 	} catch (error) {
-		return formResponse(res, 400, "internal failure!", error);
+		return formResponse(res, 400, error.message);
+		// return formResponse(res, 400, "internal failure!", error);
 	}
 };
 
@@ -76,7 +77,7 @@ exports.forgotPassword = async (req, res) => {
 			to: req.body.email,
 			subject: "Generate Link for Reset Password from BravoTeam",
 			html: ` <h3> Link  to Reset Password </h3>
-              <p> Hello, this is your link: ${process.env.APP_URL}/auth/reset-password/${tokenForgot} </p>`
+              <p> Hello, this is your link: ${process.env.REACT_APP_URL}/auth/reset-password/${tokenForgot} </p>`
 		};
 		transporter.sendMail(mailOptions, (err) => {
 			if (err) {
