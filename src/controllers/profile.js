@@ -34,12 +34,16 @@ exports.updateUserProfile = async (req, res) => {
 };
 
 exports.getUserProfileById = async (req, res) => {
-	const {id} = req.authUser;
+	const {id} = req.params;
 	const user = await profileModel.findByPk(id);
-	if (user === null) {
-		return formResponse(res, 404, "User profile not found!");
-	} else {
-		return formResponse(res, 200, `Get user id: ${id} successfully!`, user);
+	try {
+		if (user === null) {
+			return formResponse(res, 404, "User profile not found!");
+		} else {
+			return formResponse(res, 200, `Get user id: ${id} successfully!`, user);
+		}
+	} catch (error) {
+		return formResponse(res, 200, "An error occured!", user);
 	}
 };
 
@@ -66,6 +70,7 @@ exports.detailUserProfile = async (req, res) => {
 			email: user.email,
 			picture: user.picture,
 			city: user.city,
+			phoneNumber: user.phoneNumber,
 			address: user.address,
 			post_code: user.post_code
 		};
@@ -141,7 +146,7 @@ exports.getDetailUserViaCardPayment = async (req, res) => {
 			},
 			include: [{
 				model: profileModel,
-        as: "user", 
+				as: "user", 
 				attributes: {
 					exclude: ["createdAt", "updatedAt", "password"]
 				}  
@@ -156,7 +161,7 @@ exports.getDetailUserViaCardPayment = async (req, res) => {
 			results: card
 		});
 	}catch(err){
-    console.log(err);
+		console.log(err);
 		return res.status(200).json({
 			success: false,
 			Message: "ann errors occured",
