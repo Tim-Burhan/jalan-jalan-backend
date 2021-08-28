@@ -5,6 +5,9 @@ const uploads = require("../middleware/uploads");
 
 profile.patch("/", auth, uploads ,profileController.updateUserProfile);
 profile.get("/your-profile", auth, profileController.getUserProfileById);
+profile.get("/detailUserAndCard", auth, profileController.getDetailUserViaCardPayment);
+profile.put("/editprofile", auth, uploads ,profileController.updatePutProfile);
+profile.get("/:id", profileController.getUserProfileById);
 profile.delete("/:id", profileController.deleteUserProfile);
 profile.get("/", profileController.getAllUserProfile);
 
