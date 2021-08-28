@@ -9,7 +9,7 @@ exports.getAllUserProfile = async (req, res) => {
 };
 
 exports.updateUserProfile = async (req, res) => {
-	const {id} = req.params;
+	const {id} = req.authUser;
 	const profile = await profileModel.findByPk(id);
 	if(profile === null) {
 		return formResponse(res, 404, "User profile not found!");
@@ -34,12 +34,12 @@ exports.updateUserProfile = async (req, res) => {
 };
 
 exports.getUserProfileById = async (req, res) => {
-	const {id} = req.params;
+	const {id} = req.authUser;
 	const user = await profileModel.findByPk(id);
 	if (user === null) {
 		return formResponse(res, 404, "User profile not found!");
 	} else {
-		return formResponse(res, 200, "Updated successfully! ", user);
+		return formResponse(res, 200, `Get user id: ${id} successfully!`, user);
 	}
 };
 

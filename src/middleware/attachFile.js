@@ -8,17 +8,18 @@ const storage = multer.diskStorage({
 	destination(_req, _file, cb) {
 		cb(null, path.join(process.cwd(), "assets", "files"));
 	},
-	filename(_req, file, cb) {
-		const ext = file.originalname.split(".")[1];
-		const date = new Date();
-		cb(null, `${date.getTime()}.${ext}`);
+	filename: function (req, file, cb) {
+		cb(
+			null,
+			file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+		);
 	},
 });
 
 const upload = multer({
 	storage,
 	limits: { fileSize: maxSize },
-}).single("attachment");
+}).single("attachFile");
 
 const uploadFilter = (req, res, next) => {
 	upload(req, res, (err) => {
